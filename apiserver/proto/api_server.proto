@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package apiserverproto;
+
+service APIServer {
+  rpc InvokeFunction (InvokeFunctionRequest) returns (InvokeFunctionReply) {}
+  rpc ListFunctions (ListFunctionsRequest) returns (ListFunctionsReply) {}
+}
+
+message FunctionParam {
+  string name = 1;
+  bytes event = 2;
+  string request_id = 3;
+  int32 timeout_in_secs = 4;
+}
+
+message InvokeFunctionRequest {
+  string container_id = 1;
+  FunctionParam function = 2;
+}
+
+message InvokeFunctionReply {
+  bytes body = 1;
+
+  message Header {
+    bytes error = 1;
+    bool handled = 2;
+    string status_code = 3;
+    message Value {
+      repeated string items = 1;
+    }
+    map<string, Value> headers = 4;
+    int64 duration_in_nanos = 5;
+    int64 max_mem_usage_in_bytes = 6;
+    string functionLog = 7;
+  }
+
+  message Footer {
+    int64 duration_in_nano_secs = 1;
+    string invoke_exception = 2;
+    string error = 3;
+  }
+
+  Header header = 2;
+  Footer footer = 3;
+}
+
+message ListFunctionsRequest {
+}
+
+message ListFunctionsReply {
+  repeated FunctionConfig functions = 1;
+}
+
+message FunctionConfig {
+  string name = 1;
+  int32 timeout = 2;
+  int32 memory_mb = 3;
+  string handler = 4;
+}

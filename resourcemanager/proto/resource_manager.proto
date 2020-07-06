@@ -1,0 +1,33 @@
+// Protocol for eemanager.
+
+syntax = "proto3";
+
+package resourcemanagerproto;
+
+service ResourceManager {
+    rpc ReserveNode(ReserveNodeRequest) returns (ReserveNodeReply) {}
+    rpc ReleaseNode(ReleaseNodeRequest) returns (ReleaseNodeReply) {}
+}
+
+message ReserveNodeRequest {
+}
+
+message ReserveNodeReply {
+    NodeDesc node  = 1;
+    bool is_throttled = 2;
+}
+
+message NodeDesc {
+    string id                     = 1;
+    string address                = 2;
+    int64 memory_in_mb            = 3;
+    string reserved_time          = 4;
+    int32  port                   = 5;
+}
+
+message ReleaseNodeRequest {
+    string id = 1;
+}
+
+message ReleaseNodeReply {
+}
