@@ -19,32 +19,34 @@ service Scheduler {
 }
 
 message AcquireContainerRequest {
-    string function_name = 1;
-    FunctionConfig function_config = 2;
+    string account_id = 1;
+    string function_name = 2;
+    FunctionConfig function_config = 3;
+    string request_id = 4;
 }
 
 message AcquireContainerReply {
-    Container container = 1;
+    string node_id = 1;
+    string node_address = 2;
+    int32 node_service_port = 3;
+    string container_id = 4;
 }
 
 message ReturnContainerRequest {
-    string container_id = 1;
-    string container_status = 2;
+    string request_id = 1;
+    string container_id = 2;
+    int64 duration_in_nanos = 3;
+    int64 max_memory_usage_in_bytes = 4;
+    string error_code = 5;
+    string error_message = 6;
+
 }
 
 message ReturnContainerReply {
 }
 
-message Container {
-    string id = 1;
-    string address = 2;
-    int32 port = 3;
-    bool is_busy = 4;
-    string node_id = 5;
-}
-
 message FunctionConfig {
-    int32 timeout = 1;
-    int32 memory_mb = 2;
+    int32 timeout_in_secs = 1;
+    int32 memory_in_bytes = 2;
     string handler = 3;
 }
