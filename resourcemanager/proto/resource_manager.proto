@@ -1,4 +1,4 @@
-// Protocol for resource manager.
+// Protocol for resourcemanager.
 
 syntax = "proto3";
 
@@ -7,27 +7,40 @@ package resourcemanagerproto;
 service ResourceManager {
     rpc ReserveNode(ReserveNodeRequest) returns (ReserveNodeReply) {}
     rpc ReleaseNode(ReleaseNodeRequest) returns (ReleaseNodeReply) {}
+    rpc GetNodesUsage(GetNodesUsageRequest) returns (GetNodesUsageReply) {}
 }
 
 message ReserveNodeRequest {
+    string request_id = 1;
+    string account_id = 2;
 }
 
 message ReserveNodeReply {
     NodeDesc node  = 1;
-    bool is_throttled = 2;
 }
 
 message NodeDesc {
-    string id                     = 1;
-    string address                = 2;
-    int64 memory_in_mb            = 3;
-    string reserved_time          = 4;
-    int32  port                   = 5;
+    string id = 1;
+    string address = 2;
+    int64  node_service_port = 3;
+    int64 memory_in_bytes = 4;
+    int64 reserved_time_timestamp_ms = 5;
+    int64 released_time_timestamp_ms = 6;
 }
 
 message ReleaseNodeRequest {
-    string id = 1;
+    string request_id = 1;
+    string id = 2;
 }
 
 message ReleaseNodeReply {
 }
+
+message GetNodesUsageRequest {
+    string request_id = 1;
+}
+
+message GetNodesUsageReply {
+    repeated NodeDesc nodes = 1;
+}
+
