@@ -19,16 +19,16 @@ service Scheduler {
 }
 
 message AcquireContainerRequest {
-    string account_id = 1;
-    string function_name = 2;
-    FunctionConfig function_config = 3;
-    string request_id = 4;
+    string request_id = 1;
+    string account_id = 2;
+    string function_name = 3;
+    FunctionConfig function_config = 4;
 }
 
 message AcquireContainerReply {
     string node_id = 1;
     string node_address = 2;
-    int32 node_service_port = 3;
+    int64 node_service_port = 3;
     string container_id = 4;
 }
 
@@ -39,14 +39,13 @@ message ReturnContainerRequest {
     int64 max_memory_usage_in_bytes = 4;
     string error_code = 5;
     string error_message = 6;
-
 }
 
 message ReturnContainerReply {
 }
 
 message FunctionConfig {
-    int32 timeout_in_secs = 1;
-    int32 memory_in_bytes = 2;
+    int64 timeout_in_ms = 1;
+    int64 memory_in_bytes = 2;
     string handler = 3;
 }
