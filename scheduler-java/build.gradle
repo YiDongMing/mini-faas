@@ -1,0 +1,63 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.google.protobuf'
+
+mainClassName = 'aliyun.serverless.SchedulerServer'
+
+sourceSets {
+  main {
+    java {
+      srcDirs = ['src/main/java']
+    }
+    resources {
+      srcDirs = ['src/main/proto']
+    }
+  }
+  test {
+    java {
+      srcDirs = ['src/test/java']
+    }
+  }
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.12'
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+    useTestNG()
+}
+
+dependencies {
+  compile 'com.google.protobuf:protobuf-java:3.11.0'
+  implementation 'io.grpc:grpc-netty-shaded:1.30.2'
+  implementation 'io.grpc:grpc-protobuf:1.30.2'
+  implementation 'io.grpc:grpc-stub:1.30.2'
+  compileOnly 'org.apache.tomcat:annotations-api:6.0.53'
+  testCompile 'org.testng:testng:7.1.0'
+}
+
+protobuf {
+  protoc {
+    artifact = 'com.google.protobuf:protoc:3.0.0'
+  }
+  plugins {
+    grpc {
+      artifact = 'io.grpc:protoc-gen-grpc-java:1.0.0-pre2'
+    }
+  }
+  generateProtoTasks {
+    ofSourceSet('main')*.plugins {
+      grpc { }
+    }
+  }
+}
