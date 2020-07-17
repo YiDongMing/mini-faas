@@ -96,10 +96,12 @@ FaaS服务方是如何提供服务的呢？其中一个核心的模块是调度�
 
 **说明**：
 
-1. Node的规格是[ecs.c6.large](https://help.aliyun.com/document_detail/108491.html#section-0yl-3wv-ims)，2C4G（2核4GB内存）ECS虚拟机，每小时0.39元，按秒计费。线上评测有最多20台Node可用，持续时间20分钟。线下测试需要自行提供ECS虚拟机，线下评测平台会根据选手提供的阿里云AccessKey创建ECS虚拟机，选手可以配置虚拟机个数，进行测试，比如20台机器运行20分钟的花费是2.6元（20x20x0.39/60）。测试完成后确保释放所有的ECS虚拟机，以免产生额外费用。
+1. Node的规格是[ecs.c6.large](https://help.aliyun.com/document_detail/108491.html#section-0yl-3wv-ims)，2C4G（2核4GB内存）ECS虚拟机，每小时0.39元，按秒计费。线上评测有最多20台Node可用，持续时间20分钟。线下测试需要自行提供ECS虚拟机，线下评测平台会根据选手提供的阿里云AccessKey创建ECS虚拟机，选手可以配置虚拟机个数，进行测试，比如20台机器运行20分钟的花费是2.6元（20x20x0.39/60）。测试完成后确保释放所有的ECS虚拟机，以免产生额外费用。[TODO: Node refill速度]
 2. Function运行所需要的容器规格由Function Meta的`memory_in_bytes`决定，在```Scheduler.AcquireContainer```时通过```memory_in_bytes```参数传入，Scheduler在调用```NodeService.CreateContainer```传入该参数，NodeService会根据该参数作为[Memory的最大限制](https://docs.docker.com/config/containers/resource_constraints/)创建Container加载函数。选手可以选择在一个Node上创建多于4GB内存的Container（超卖），但在某些情况下可能会影响性能甚至导致Function执行OOM（Out Of Memory）。
 3. Scheduler运行在4C8G ECS虚拟机上的容器内，无公网访问能力。
-4. ResourceManager，Scheduler，APIServer的Port分别是10300，10450，10500，IP在启动时由启动脚本设置。NodeService的IP和Port在```ResourceManager.ReserveNode```的返回中提供。
+4. Scheduler需要调用ResourceManager的地址通过环境变量（`RESOURCE_MANAGER_ENDPOINT`）获得，端口是`10400`。NodeService的访问地址可以从`ResourceManager.ReserveNode`的[返回](https://code.aliyun.com/middleware-contest-2020/mini-faas/blob/master/scheduler/core/router.go#L95-96)中获得。
+5。 Scheduler gRPC Server监听端口是`10600`，如[示例](https://code.aliyun.com/middleware-contest-2020/mini-faas/blob/master/scheduler/main.go#L103)所示。
+6. 日志写到stdout，在评测结果中提供，有效期1天。
 
 ## 评测方式和标准
 
@@ -150,6 +152,8 @@ git clone https://code.aliyun.com/middleware-contest-2020/mini-faas.git
 cd mini-faas
 ```
 
+
+
 TODO：
 
 1. Java语言不会提供完整示例，后续（7月18日前）会提供基本接口实现和调用示例。
@@ -159,7 +163,7 @@ TODO：
 
 ## 提交线上测试
 
-待定
+为保证评测程序正常运行出分，请提交阿里云ACR镜像，仓库地域选择杭州。具体参考：https://tianchi.aliyun.com/competition/entrance/231759/tab/174
 
 ## 参考
 
