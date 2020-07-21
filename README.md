@@ -96,7 +96,7 @@ FaaS服务方是如何提供服务的呢？其中一个核心的模块是调度�
 
 **说明**：
 
-1. Node的规格是[ecs.c6.large](https://help.aliyun.com/document_detail/108491.html#section-0yl-3wv-ims)，2C4G（2核4GB内存）ECS虚拟机，每小时0.39元，按秒计费。线上评测有最多20台Node可用，持续时间20分钟。<strike>线下测试需要自行提供ECS虚拟机，线下评测平台会根据选手提供的阿里云AccessKey创建ECS虚拟机，选手可以配置虚拟机个数，进行测试，比如20台机器运行20分钟的花费是2.6元（20x20x0.39/60）。测试完成后确保释放所有的ECS虚拟机，以免产生额外费用。</stike>
+1. Node的规格是[ecs.c6.large](https://help.aliyun.com/document_detail/108491.html#section-0yl-3wv-ims)，2C4G（2核4GB内存）ECS虚拟机，每小时0.39元，按秒计费。线上评测有最多20台Node可用，持续时间20分钟。初始可用Node个数是10，每当一个Node被预留后，ResourceManager会在t秒内创建一个新的Node，直到ResourceManager拥有20个Node。类似的，当Scheduler调用`ReleaseNode`释放Node后，该Node不能被立刻使用，ResourceManager会在t秒内将释放的Node变为可用。目前，时间段t可能不够稳定，后续平台会提供一个最大值，比如30秒。<strike>线下测试需要自行提供ECS虚拟机，线下评测平台会根据选手提供的阿里云AccessKey创建ECS虚拟机，选手可以配置虚拟机个数，进行测试，比如20台机器运行20分钟的花费是2.6元（20x20x0.39/60）。测试完成后确保释放所有的ECS虚拟机，以免产生额外费用。</stike>
 2. Function运行所需要的容器规格由Function Meta的`memory_in_bytes`决定，在```Scheduler.AcquireContainer```时通过```memory_in_bytes```参数传入，Scheduler在调用```NodeService.CreateContainer```传入该参数，NodeService会根据该参数作为[Memory的最大限制](https://docs.docker.com/config/containers/resource_constraints/)创建Container加载函数，设置的[CPU quota](https://docs.docker.com/config/containers/resource_constraints/)和内存成比例，每1GB内存对应0.67 vCPU（`0.67*memory_in_bytes/1GB*1024*1024*1024`）。比如当`memory_in_bytes`是512MB时，容器分到的vCPU是0.33。为了给NodeService预留一些内存，ResourceManager的`ReserveNode` [API](https://code.aliyun.com/middleware-contest-2020/mini-faas/blob/master/resourcemanager/proto/resource_manager.proto#L26)返回的`memory_in_bytes`是3072MB。
 。选手可以选择在一个Node上创建多于4GB内存的Container（超卖），但在某些情况下可能会影响性能甚至导致Function执行OOM（Out Of Memory）或者NodeService的性能。
 3. Scheduler运行在4C8G ECS虚拟机上的容器内，无公网访问能力。
