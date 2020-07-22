@@ -6,32 +6,27 @@
 请确保您本地安装 Docker。
  
 1. 启动服务
-
-```
-make stack
-```
+    ```
+    make stack
+    ```
 
 2. 示例调用
-
-```
-make sample-invoke
-```
+    ```
+    make sample-invoke
+    ```
 
 3. 删除服务
-
-```
-make clean
-```
+    ```
+    make clean
+    ```
 
 ### 其他
 * 本地调用 apiserver 的示例代码在： sample/invoke/main.go 修改后可以重新编译 sample 镜像：
-
-```
-make sample-invoke BUILD=true 
-```
+    ```
+    make sample-invoke BUILD=true
+    ```
 
 * 替换自己实现的 scheduler image
-
-```
-SCHEDULER_IMAGE={your-acr-image-name} make stack
-```
+    ```
+    SCHEDULER_IMAGE={your-acr-image-name} make stack
+    ```
