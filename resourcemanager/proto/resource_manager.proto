@@ -11,7 +11,10 @@ service ResourceManager {
 }
 
 message ReserveNodeRequest {
+    // Same as `request_id` in schedulerproto.AcquireContainerRequest, though it is
+    // not mandatory
     string request_id = 1;
+    // Same as `account_id` in schedulerproto.AcquireContainerRequest.
     string account_id = 2;
 }
 
@@ -22,14 +25,19 @@ message ReserveNodeReply {
 message NodeDesc {
     string id = 1;
     string address = 2;
-    int64  node_service_port = 3;
+    int64 node_service_port = 3;
     int64 memory_in_bytes = 4;
+    // The following two fields are for internal accounting and should
+    // be ignored by the competitior.
     int64 reserved_time_timestamp_ms = 5;
     int64 released_time_timestamp_ms = 6;
 }
 
 message ReleaseNodeRequest {
+    // Same as `request_id` in schedulerproto.ReturnContainerRequest, though it is
+    // not mandatory
     string request_id = 1;
+    // The ID of the node to release.
     string id = 2;
 }
 
@@ -37,6 +45,7 @@ message ReleaseNodeReply {
 }
 
 message GetNodesUsageRequest {
+    // Same as `request_id` in schedulerproto.AcquireContainerRequest.
     string request_id = 1;
 }
 
