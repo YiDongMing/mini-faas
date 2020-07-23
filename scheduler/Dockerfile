@@ -12,13 +12,13 @@ RUN mkdir -p ${server_dir}
 RUN mkdir -p ${config_dir}
 RUN mkdir -p ${log_dir}
 
-COPY ./scheduler ${server_dir}
-COPY ./config_product/config.json ${config_dir}/
-COPY ./config_product/log.xml ${config_dir}/
+COPY ./ ${server_dir}
+COPY ./config/config.json ${config_dir}/
+COPY ./config/log.xml ${config_dir}/
 
 WORKDIR ${server_dir}
 EXPOSE ${port}
 
-ENTRYPOINT ["/aliyuncnpc/scheduler/scheduler", \
+ENTRYPOINT ["/aliyuncnpc/scheduler/main", \
             "-config=./config/config.json", \
             "-logconfig=./config/log.xml"]
