@@ -1,4 +1,4 @@
-module aliyun/serverless/mini-faas
+module mini-faas
 
 go 1.14
 

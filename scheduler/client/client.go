@@ -5,7 +5,7 @@ package client
 import (
 	"google.golang.org/grpc"
 
-	pb "aliyun/serverless/mini-faas/scheduler/proto"
+	pb "mini-faas/scheduler/proto"
 )
 
 // Client closable SchedulerClient interface

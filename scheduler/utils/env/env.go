@@ -11,8 +11,8 @@ import (
 
 	"github.com/spf13/viper"
 
-	"aliyun/serverless/mini-faas/scheduler/utils/logger"
-	"aliyun/serverless/mini-faas/scheduler/utils/logger/seelog"
+	"mini-faas/scheduler/utils/logger"
+	"mini-faas/scheduler/utils/logger/seelog"
 )
 
 // getHostName : get the hostname of the host machine if the container is started by docker run --net=host

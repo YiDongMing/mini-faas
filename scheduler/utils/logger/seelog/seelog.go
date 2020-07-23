@@ -6,7 +6,7 @@ import (
 
 	"github.com/cihub/seelog"
 
-	lg "aliyun/serverless/mini-faas/scheduler/utils/logger"
+	lg "mini-faas/scheduler/utils/logger"
 )
 
 const (

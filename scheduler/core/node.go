@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 
-	pb "aliyun/serverless/mini-faas/nodeservice/proto"
+	pb "mini-faas/nodeservice/proto"
 )
 
 type NodeInfo struct {

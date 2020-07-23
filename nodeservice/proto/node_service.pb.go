@@ -208,10 +208,12 @@ type InvokeFunctionRequest struct {
 	FunctionMeta *FunctionMeta `protobuf:"bytes,4,opt,name=function_meta,json=functionMeta" json:"function_meta,omitempty"`
 }
 
-func (m *InvokeFunctionRequest) Reset()                    { *m = InvokeFunctionRequest{} }
-func (m *InvokeFunctionRequest) String() string            { return proto.CompactTextString(m) }
-func (*InvokeFunctionRequest) ProtoMessage()               {}
-func (*InvokeFunctionRequest) Descriptor() ([]byte, []int) { return fileDescriptorNodeService, []int{7} }
+func (m *InvokeFunctionRequest) Reset()         { *m = InvokeFunctionRequest{} }
+func (m *InvokeFunctionRequest) String() string { return proto.CompactTextString(m) }
+func (*InvokeFunctionRequest) ProtoMessage()    {}
+func (*InvokeFunctionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorNodeService, []int{7}
+}
 
 func (m *InvokeFunctionRequest) GetRequestId() string {
 	if m != nil {

@@ -11,19 +11,19 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 
-	rmPb "aliyun/serverless/mini-faas/resourcemanager/proto"
-	cp "aliyun/serverless/mini-faas/scheduler/config"
-	"aliyun/serverless/mini-faas/scheduler/core"
-	pb "aliyun/serverless/mini-faas/scheduler/proto"
-	"aliyun/serverless/mini-faas/scheduler/server"
-	"aliyun/serverless/mini-faas/scheduler/utils/global"
-	"aliyun/serverless/mini-faas/scheduler/utils/env"
-	"aliyun/serverless/mini-faas/scheduler/utils/logger"
+	rmPb "mini-faas/resourcemanager/proto"
+	cp "mini-faas/scheduler/config"
+	"mini-faas/scheduler/core"
+	pb "mini-faas/scheduler/proto"
+	"mini-faas/scheduler/server"
+	"mini-faas/scheduler/utils/env"
+	"mini-faas/scheduler/utils/global"
+	"mini-faas/scheduler/utils/logger"
 )
 
 const (
-	defaultConfigFile    = "config/config.json"
-	defaultLogConfigFile = "config/log.xml"
+	defaultConfigFile    = "config/dev/config.json"
+	defaultLogConfigFile = "config/dev/log.xml"
 	defaultPort          = 10450
 	moduleName           = "Scheduler"
 )

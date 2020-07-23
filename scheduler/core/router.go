@@ -9,11 +9,11 @@ import (
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 
-	nsPb "aliyun/serverless/mini-faas/nodeservice/proto"
-	rmPb "aliyun/serverless/mini-faas/resourcemanager/proto"
-	cp "aliyun/serverless/mini-faas/scheduler/config"
-	"aliyun/serverless/mini-faas/scheduler/model"
-	pb "aliyun/serverless/mini-faas/scheduler/proto"
+	nsPb "mini-faas/nodeservice/proto"
+	rmPb "mini-faas/resourcemanager/proto"
+	cp "mini-faas/scheduler/config"
+	"mini-faas/scheduler/model"
+	pb "mini-faas/scheduler/proto"
 )
 
 type ContainerInfo struct {

@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 
-	"aliyun/serverless/mini-faas/scheduler/core"
-	"aliyun/serverless/mini-faas/scheduler/model"
-	pb "aliyun/serverless/mini-faas/scheduler/proto"
+	"mini-faas/scheduler/core"
+	"mini-faas/scheduler/model"
+	pb "mini-faas/scheduler/proto"
 )
 
 type Server struct {
