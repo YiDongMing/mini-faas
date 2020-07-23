@@ -12,6 +12,15 @@ then
     export SCHEDULER_PORT=10600
 fi
 
+if [ "$BUILD" == "true" ]; then
+  docker run -v $(pwd):/mini-faas golang:1.12.9 bash -c "cd /mini-faas/scheduler; export GOPROXY=https://goproxy.io; go build -o scheduler ./main.go"
+  cd scheduler
+  chmod +x scheduler
+  docker build -t $SCHEDULER_IMAGE .
+  rm ./scheduler
+  cd ..
+fi
+
 start-scheduler() {
   if [ -z "$RESOURCE_MANAGER_ENDPOINT" ]
   then

@@ -7,4 +7,4 @@ WORKDIR /opt/scheduler-java
 
 EXPOSE {port}
 
-ENTRYPOINT [ 'gradle' 'run' ]
+ENTRYPOINT [ 'gradle', 'run' ]

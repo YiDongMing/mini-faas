@@ -5,19 +5,28 @@
 ### 快速开始
 请确保您本地安装 Docker。
  
-1. 启动服务
+* 使用提供的已构建好的 scheduler demo 镜像启动服务
     ```
     make stack
     ```
 
-2. 示例调用
+* 或者构建本地 scheduler 镜像，并启动服务
+    ```
+    make stack BUILD=true SCHEDULER_IMAGE=registry.cn-hangzhou.aliyuncs.com/{namespace}/{image}:{tag}
+    ```
+
+* 示例调用
     ```
     make sample-invoke
     ```
 
-3. 删除服务
+* 删除服务
     ```
     make clean
+    ```
+* 发布镜像
+    ```
+    docker push registry.cn-hangzhou.aliyuncs.com/{namespace}/{image}:{tag}
     ```
 
 ### 其他

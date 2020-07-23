@@ -1,7 +1,9 @@
 package core
 
 import (
+	"aliyun/serverless/mini-faas/scheduler/utils/logger"
 	"context"
+	"sort"
 	"sync"
 	"time"
 
@@ -55,7 +57,7 @@ func (r *Router) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 	fmObj, _ := r.functionMap.Get(req.FunctionName)
 	containerMap := fmObj.(cmap.ConcurrentMap)
 
-	for _, key := range containerMap.Keys() {
+	for _, key := range sortedKeys(containerMap.Keys()) {
 		cmObj, _ := containerMap.Get(key)
 		container := cmObj.(*ContainerInfo)
 		container.Lock()
@@ -110,7 +112,7 @@ func (r *Router) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 }
 
 func (r *Router) getNode(accountId string, memoryReq int64) (*NodeInfo, error) {
-	for _, key := range r.nodeMap.Keys() {
+	for _, key := range sortedKeys(r.nodeMap.Keys()) {
 		nmObj, _ := r.nodeMap.Get(key)
 		node := nmObj.(*NodeInfo)
 		node.Lock()
@@ -123,12 +125,22 @@ func (r *Router) getNode(accountId string, memoryReq int64) (*NodeInfo, error) {
 	}
 	ctxR, cancelR := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancelR()
+	now := time.Now().UnixNano()
 	replyRn, err := r.rmClient.ReserveNode(ctxR, &rmPb.ReserveNodeRequest{
 		AccountId: accountId,
 	})
 	if err != nil {
+		logger.WithFields(logger.Fields{
+			"Operation": "ReserveNode",
+			"Latency": (time.Now().UnixNano() - now)/1e6,
+			"Error": true,
+		}).Errorf("Failed to reserve node due to %v", err)
 		return nil, errors.WithStack(err)
 	}
+	logger.WithFields(logger.Fields{
+		"Operation": "ReserveNode",
+		"Latency": (time.Now().UnixNano() - now)/1e6,
+	}).Infof("")
 
 	nodeDesc := replyRn.Node
 	node, err := NewNode(nodeDesc.Id, nodeDesc.Address, nodeDesc.NodeServicePort, nodeDesc.MemoryInBytes)
@@ -166,4 +178,9 @@ func (r *Router) ReturnContainer(ctx context.Context, res *model.ResponseInfo) e
 	container.Unlock()
 	r.requestMap.Remove(res.ID)
 	return nil
+}
+
+func sortedKeys(keys []string) []string {
+	sort.Strings(keys)
+	return keys
 }
