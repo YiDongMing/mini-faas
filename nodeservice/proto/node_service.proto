@@ -117,8 +117,7 @@ message ContainerStats {
 }
 
 message GetStatsRequest {
-    // Specify which request you are interested to know about its
-    // usage statistics.
+    // This field is optional.
     string request_id = 1;
 }
 

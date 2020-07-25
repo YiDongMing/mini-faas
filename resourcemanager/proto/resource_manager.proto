@@ -44,12 +44,3 @@ message ReleaseNodeRequest {
 message ReleaseNodeReply {
 }
 
-message GetNodesUsageRequest {
-    // Same as `request_id` in schedulerproto.AcquireContainerRequest.
-    string request_id = 1;
-}
-
-message GetNodesUsageReply {
-    repeated NodeDesc nodes = 1;
-}
-
