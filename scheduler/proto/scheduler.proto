@@ -19,13 +19,18 @@ service Scheduler {
 }
 
 message AcquireContainerRequest {
+    // The ID of the function request (not this AcquireContainerRequest). The same
+    // ID will be used in ReturnContainerRequest.
     string request_id = 1;
+    // The account_id will be the same throughout the evaluation. Just pass it
+    // to ResourceManager as what you have received.
     string account_id = 2;
     string function_name = 3;
     FunctionConfig function_config = 4;
 }
 
 message AcquireContainerReply {
+    // The ID of the node that hosts this container.
     string node_id = 1;
     string node_address = 2;
     int64 node_service_port = 3;
@@ -33,11 +38,16 @@ message AcquireContainerReply {
 }
 
 message ReturnContainerRequest {
+    // See the AcquireContainerRequest above for explanation.
     string request_id = 1;
     string container_id = 2;
+    // The duration of function execution.
     int64 duration_in_nanos = 3;
+    // The max memory usage during the function execution.
     int64 max_memory_usage_in_bytes = 4;
+    // The error_code is not used yet.
     string error_code = 5;
+    // The error message if the execution goes wrong.
     string error_message = 6;
 }
 
@@ -45,7 +55,10 @@ message ReturnContainerReply {
 }
 
 message FunctionConfig {
+    // Timeout for this function.
     int64 timeout_in_ms = 1;
+    // The required memory.
     int64 memory_in_bytes = 2;
+    // The name of the handler function.
     string handler = 3;
 }
