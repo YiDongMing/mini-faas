@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "aliyun/serverless/mini-faas/apiserver/proto"
+	pb "mini-faas/apiserver/proto"
 
 	"google.golang.org/grpc"
 

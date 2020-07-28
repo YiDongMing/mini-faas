@@ -1,8 +1,8 @@
 package core
 
 import (
-	"aliyun/serverless/mini-faas/scheduler/utils/logger"
 	"context"
+	"mini-faas/scheduler/utils/logger"
 	"sort"
 	"sync"
 	"time"
@@ -132,14 +132,14 @@ func (r *Router) getNode(accountId string, memoryReq int64) (*NodeInfo, error) {
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"Operation": "ReserveNode",
-			"Latency": (time.Now().UnixNano() - now)/1e6,
-			"Error": true,
+			"Latency":   (time.Now().UnixNano() - now) / 1e6,
+			"Error":     true,
 		}).Errorf("Failed to reserve node due to %v", err)
 		return nil, errors.WithStack(err)
 	}
 	logger.WithFields(logger.Fields{
 		"Operation": "ReserveNode",
-		"Latency": (time.Now().UnixNano() - now)/1e6,
+		"Latency":   (time.Now().UnixNano() - now) / 1e6,
 	}).Infof("")
 
 	nodeDesc := replyRn.Node

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"aliyun/serverless/mini-faas/scheduler/utils/logger"
+	"mini-faas/scheduler/utils/logger"
 	"sync"
 	"time"
 
@@ -39,9 +39,9 @@ func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 	}
 
 	logger.WithFields(logger.Fields{
-		"Operation": "AcquireContainer",
-		"FunctionName": req.FunctionName,
-		"RequestId": req.RequestId,
+		"Operation":     "AcquireContainer",
+		"FunctionName":  req.FunctionName,
+		"RequestId":     req.RequestId,
 		"MemoryInBytes": req.FunctionConfig.MemoryInBytes,
 	}).Infof("")
 	now := time.Now().UnixNano()
@@ -49,8 +49,8 @@ func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"Operation": "AcquireContainer",
-			"Latency": (time.Now().UnixNano() - now)/1e6,
-			"Error": true,
+			"Latency":   (time.Now().UnixNano() - now) / 1e6,
+			"Error":     true,
 		}).Errorf("Failed to acquire due to %v", err)
 		return nil, err
 	}
@@ -59,12 +59,12 @@ func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 
 func (s *Server) ReturnContainer(ctx context.Context, req *pb.ReturnContainerRequest) (*pb.ReturnContainerReply, error) {
 	logger.WithFields(logger.Fields{
-		"Operation": "ReturnContainer",
-		"ContainerId": req.ContainerId,
-		"RequestId": req.RequestId,
-		"ErrorCode": req.ErrorCode,
+		"Operation":             "ReturnContainer",
+		"ContainerId":           req.ContainerId,
+		"RequestId":             req.RequestId,
+		"ErrorCode":             req.ErrorCode,
 		"MaxMemoryUsageInBytes": req.MaxMemoryUsageInBytes,
-		"DurationInMs": req.DurationInNanos/1e6,
+		"DurationInMs":          req.DurationInNanos / 1e6,
 	}).Infof("")
 	now := time.Now().UnixNano()
 	err := s.router.ReturnContainer(ctx, &model.ResponseInfo{
@@ -74,8 +74,8 @@ func (s *Server) ReturnContainer(ctx context.Context, req *pb.ReturnContainerReq
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"Operation": "ReturnContainer",
-			"Latency": (time.Now().UnixNano() - now)/1e6,
-			"Error": true,
+			"Latency":   (time.Now().UnixNano() - now) / 1e6,
+			"Error":     true,
 		}).Errorf("Failed to acquire due to %v", err)
 		return nil, err
 	}

@@ -1,3 +1,4 @@
+#! /bin/bash
 FROM debian:stable-slim
 
 ARG port=10600
@@ -10,13 +11,13 @@ ENV SERVICE_PORT=${port}
 RUN mkdir -p ${server_dir}
 RUN mkdir -p ${config_dir}
 
-COPY ./scheduler ${server_dir}/
+COPY ./ ${server_dir}/
 COPY ./config/dev/config.json ${config_dir}/
 COPY ./config/dev/log.xml ${config_dir}/
 
 WORKDIR ${server_dir}
 EXPOSE ${port}
 
-ENTRYPOINT ["/aliyuncnpc/scheduler/main", \
+ENTRYPOINT ["/aliyuncnpc/scheduler/scheduler", \
             "-config=./config/config.json", \
             "-logconfig=./config/log.xml"]
