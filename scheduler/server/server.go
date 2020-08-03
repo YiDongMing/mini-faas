@@ -27,7 +27,7 @@ func NewServer(router *core.Router) *Server {
 
 func (s *Server) Start() {
 	// Just in case the router has internal loops.
-	// s.router.Start()
+	s.router.Start()
 }
 
 func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerRequest) (*pb.AcquireContainerReply, error) {
@@ -68,8 +68,10 @@ func (s *Server) ReturnContainer(ctx context.Context, req *pb.ReturnContainerReq
 	}).Infof("")
 	now := time.Now().UnixNano()
 	err := s.router.ReturnContainer(ctx, &model.ResponseInfo{
-		ID:          req.RequestId,
-		ContainerId: req.ContainerId,
+		ID:                    req.RequestId,
+		ContainerId:           req.ContainerId,
+		MaxMemoryUsageInBytes: req.MaxMemoryUsageInBytes,
+		DurationInMs:          req.DurationInNanos,
 	})
 	if err != nil {
 		logger.WithFields(logger.Fields{

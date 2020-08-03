@@ -85,11 +85,11 @@ func main() {
 	rm := rmPb.NewResourceManagerClient(conn)
 
 	router := core.NewRouter(&config, rm)
+	router.Start()
+	go router.ReduceNodeAuto()
 	s := server.NewServer(router)
-	s.Start()
-
 	pb.RegisterSchedulerServer(svr, s)
-
+	s.Start()
 	servicePort := defaultPort
 	servicePortS := os.Getenv("SERVICE_PORT")
 	if servicePortS != "" {
