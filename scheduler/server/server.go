@@ -30,7 +30,11 @@ func (s *Server) Start() {
 	s.router.Start()
 }
 
+var getNodecount = 5
+
 func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerRequest) (*pb.AcquireContainerReply, error) {
+	containerCC := make(chan struct{}, getNodecount)
+	defer close(containerCC)
 	if req.AccountId == "" {
 		return nil, grpc.Errorf(codes.InvalidArgument, "account ID cannot be empty")
 	}
@@ -45,7 +49,9 @@ func (s *Server) AcquireContainer(ctx context.Context, req *pb.AcquireContainerR
 		"MemoryInBytes": req.FunctionConfig.MemoryInBytes,
 	}).Infof("")
 	now := time.Now().UnixNano()
+	containerCC <- struct{}{}
 	reply, err := s.router.AcquireContainer(ctx, req)
+	<-containerCC // 执行完毕，释放资源
 	if err != nil {
 		logger.WithFields(logger.Fields{
 			"Operation": "AcquireContainer",
@@ -63,6 +69,7 @@ func (s *Server) ReturnContainer(ctx context.Context, req *pb.ReturnContainerReq
 		"ContainerId":           req.ContainerId,
 		"RequestId":             req.RequestId,
 		"ErrorCode":             req.ErrorCode,
+		"ErrorMessage":          req.ErrorMessage,
 		"MaxMemoryUsageInBytes": req.MaxMemoryUsageInBytes,
 		"DurationInMs":          req.DurationInNanos / 1e6,
 	}).Infof("")

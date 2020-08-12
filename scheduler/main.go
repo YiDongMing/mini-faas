@@ -86,7 +86,8 @@ func main() {
 
 	router := core.NewRouter(&config, rm)
 	router.Start()
-	go router.ReduceNodeAuto()
+	//go router.ReduceNodeAuto()
+	//go router.ReduceContainer()
 	s := server.NewServer(router)
 	pb.RegisterSchedulerServer(svr, s)
 	s.Start()
